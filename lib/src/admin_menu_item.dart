@@ -6,10 +6,16 @@ class AdminMenuItem {
     this.route,
     this.icon,
     this.children = const [],
+
+    required this.unSelectedWidget,
+    required this.selectedWidget,
   });
 
   final String title;
   final String? route;
   final IconData? icon;
   final List<AdminMenuItem> children;
+
+  final Widget unSelectedWidget ;
+  final Widget selectedWidget ;
 }
