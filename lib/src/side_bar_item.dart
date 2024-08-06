@@ -16,7 +16,12 @@ class SideBarItem extends StatelessWidget {
     required this.backgroundColor,
     required this.activeBackgroundColor,
     required this.borderColor,
+    required this.unSelectedWidget,
+    required this.selectedWidget,
   });
+
+  final Widget unSelectedWidget;
+  final Widget selectedWidget;
 
   final List<AdminMenuItem> items;
   final int index;
@@ -30,6 +35,7 @@ class SideBarItem extends StatelessWidget {
   final Color backgroundColor;
   final Color activeBackgroundColor;
   final Color borderColor;
+
   bool get isLast => index == items.length - 1;
 
   @override
@@ -55,7 +61,8 @@ class SideBarItem extends StatelessWidget {
     if (item.children.isEmpty) {
       return ListTile(
         contentPadding: _getTilePadding(depth),
-        leading: _buildIcon(item.icon, selected),
+        leading: _buildIcon(item.selectedWidget, item.unSelectedWidget, selected),
+        // leading: selected  ? selectedWidget : unSelectedWidget,
         title: _buildTitle(item.title, selected),
         selected: selected,
         tileColor: backgroundColor,
@@ -73,6 +80,8 @@ class SideBarItem extends StatelessWidget {
       return SideBarItem(
         items: item.children,
         index: index++,
+        unSelectedWidget: child.unSelectedWidget,
+        selectedWidget: child.selectedWidget,
         onSelected: onSelected,
         selectedRoute: selectedRoute,
         depth: depth + 1,
@@ -90,7 +99,7 @@ class SideBarItem extends StatelessWidget {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         tilePadding: _getTilePadding(depth),
-        leading: _buildIcon(item.icon),
+        leading: _buildIcon(item.selectedWidget, item.unSelectedWidget, selected),
         title: _buildTitle(item.title),
         initiallyExpanded: selected,
         children: childrenTiles,
@@ -110,20 +119,8 @@ class SideBarItem extends StatelessWidget {
     return false;
   }
 
-  Widget _buildIcon(IconData? icon, [bool selected = false]) {
-    return icon != null
-        ? Icon(
-            icon,
-            size: 22,
-            color: selected
-                ? activeIconColor != null
-                    ? activeIconColor
-                    : activeTextStyle.color
-                : iconColor != null
-                    ? iconColor
-                    : textStyle.color,
-          )
-        : SizedBox();
+  Widget _buildIcon(Widget selectedWidget, Widget unSelectedWidget, [bool selected = false]) {
+    return selected ? selectedWidget : unSelectedWidget;
   }
 
   Widget _buildTitle(String title, [bool selected = false]) {
