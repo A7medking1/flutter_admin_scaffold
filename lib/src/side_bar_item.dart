@@ -16,12 +16,8 @@ class SideBarItem extends StatelessWidget {
     required this.backgroundColor,
     required this.activeBackgroundColor,
     required this.borderColor,
-    required this.unSelectedWidget,
-    required this.selectedWidget,
   });
 
-  final Widget unSelectedWidget;
-  final Widget selectedWidget;
 
   final List<AdminMenuItem> items;
   final int index;
@@ -60,7 +56,8 @@ class SideBarItem extends StatelessWidget {
     bool selected = _isSelected(selectedRoute, [item]);
 
     if (item.children.isEmpty) {
-      return Container(
+      return AnimatedContainer(
+        duration: Duration(milliseconds: 500),
         padding: EdgeInsetsDirectional.only(start: 10, end: 10,),
         decoration: BoxDecoration(
           borderRadius: BorderRadiusDirectional.circular(15),
@@ -69,11 +66,9 @@ class SideBarItem extends StatelessWidget {
         child: ListTile(
           contentPadding: _getTilePadding(depth),
           leading: _buildIcon(item.selectedWidget, item.unSelectedWidget, selected),
-          // leading: selected  ? selectedWidget : unSelectedWidget,
           title: _buildTitle(item.title, selected),
           selected: selected,
-          trailing: selected ? Padding(padding: EdgeInsetsDirectional.only(top: 10, bottom: 10), child: VerticalDivider(color: Color(0XFF2E6BF4), thickness: 3,)) : null,
-          //tileColor: backgroundColor,
+          trailing: selected ? Padding(padding: EdgeInsetsDirectional.only(top: 10, bottom: 10), child: VerticalDivider(color: Color(0XFF2E6BF4), thickness: 3,),) : null,
           selectedTileColor: activeBackgroundColor,
           onTap: () {
             if (onSelected != null) {
@@ -89,11 +84,9 @@ class SideBarItem extends StatelessWidget {
       return SideBarItem(
         items: item.children,
         index: index++,
-        unSelectedWidget: child.unSelectedWidget,
-        selectedWidget: child.selectedWidget,
         onSelected: onSelected,
         selectedRoute: selectedRoute,
-        depth: depth + 1,
+        depth: depth,
         iconColor: iconColor,
         activeIconColor: activeIconColor,
         textStyle: textStyle,
@@ -101,17 +94,21 @@ class SideBarItem extends StatelessWidget {
         backgroundColor: backgroundColor,
         activeBackgroundColor: activeBackgroundColor,
         borderColor: borderColor,
+
       );
     }).toList();
 
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-    //    tilePadding: _getTilePadding(depth),
-        leading: _buildIcon(item.selectedWidget, item.unSelectedWidget, selected),
-        title: _buildTitle(item.title),
-        initiallyExpanded: selected,
-        children: childrenTiles,
+      child: Padding(
+        padding: EdgeInsetsDirectional.only(start: 10),
+        child: ExpansionTile(
+          tilePadding: _getTilePadding(depth),
+          leading: _buildIcon(item.selectedWidget, item.unSelectedWidget, selected),
+          title: _buildTitle(item.title),
+          initiallyExpanded: selected,
+          children: childrenTiles,
+        ),
       ),
     );
   }
@@ -141,7 +138,7 @@ class SideBarItem extends StatelessWidget {
 
   EdgeInsets _getTilePadding(int depth) {
     return EdgeInsets.only(
-      left: 10.0 + 10.0 * depth,
+      left: 10 + 10.0 * depth,
       right: 10.0,
     );
   }
