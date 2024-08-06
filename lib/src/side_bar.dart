@@ -28,12 +28,8 @@ class SideBar extends StatefulWidget {
     this.scrollController,
     this.header,
     this.footer,
-    this.unSelectedWidget = const SizedBox(),
-    this.selectedWidget = const SizedBox(),
   }) : super(key: key);
 
-  final Widget unSelectedWidget;
-  final Widget selectedWidget;
 
 
   final List<AdminMenuItem> items;
@@ -72,8 +68,6 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin {
             child: ListView.builder(
               itemBuilder: (BuildContext context, int index) {
                 return SideBarItem(
-                  selectedWidget: widget.selectedWidget,
-                  unSelectedWidget: widget.unSelectedWidget,
                   items: widget.items,
                   index: index,
                   onSelected: widget.onSelected,
