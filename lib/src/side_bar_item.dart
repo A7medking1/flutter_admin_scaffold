@@ -44,6 +44,7 @@ class SideBarItem extends StatelessWidget {
       return _buildTiles(context, items[index]);
     }
     return Container(
+      padding: EdgeInsetsDirectional.only(start: 10, end: 10),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -59,19 +60,27 @@ class SideBarItem extends StatelessWidget {
     bool selected = _isSelected(selectedRoute, [item]);
 
     if (item.children.isEmpty) {
-      return ListTile(
-        contentPadding: _getTilePadding(depth),
-        leading: _buildIcon(item.selectedWidget, item.unSelectedWidget, selected),
-        // leading: selected  ? selectedWidget : unSelectedWidget,
-        title: _buildTitle(item.title, selected),
-        selected: selected,
-        tileColor: backgroundColor,
-        selectedTileColor: activeBackgroundColor,
-        onTap: () {
-          if (onSelected != null) {
-            onSelected!(item);
-          }
-        },
+      return Container(
+        padding: EdgeInsetsDirectional.only(start: 10, end: 10,),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadiusDirectional.circular(15),
+          color: selected ? Color(0xFFECF0F8) : Colors.white,
+        ),
+        child: ListTile(
+          contentPadding: _getTilePadding(depth),
+          leading: _buildIcon(item.selectedWidget, item.unSelectedWidget, selected),
+          // leading: selected  ? selectedWidget : unSelectedWidget,
+          title: _buildTitle(item.title, selected),
+          selected: selected,
+          trailing: selected ? Padding(padding: EdgeInsetsDirectional.only(top: 10, bottom: 10), child: VerticalDivider(color: Color(0XFF2E6BF4), thickness: 3,)) : null,
+          //tileColor: backgroundColor,
+          selectedTileColor: activeBackgroundColor,
+          onTap: () {
+            if (onSelected != null) {
+              onSelected!(item);
+            }
+          },
+        ),
       );
     }
 
@@ -98,7 +107,7 @@ class SideBarItem extends StatelessWidget {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        tilePadding: _getTilePadding(depth),
+    //    tilePadding: _getTilePadding(depth),
         leading: _buildIcon(item.selectedWidget, item.unSelectedWidget, selected),
         title: _buildTitle(item.title),
         initiallyExpanded: selected,
